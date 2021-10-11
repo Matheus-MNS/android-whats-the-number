@@ -1,7 +1,8 @@
-package com.example.whatsthenumber
+package com.example.whatsthenumber.base_app
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.whatsthenumber.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
