@@ -2,4 +2,7 @@
     <string name="app_name">What\'s the number</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_guess">Digite o palpite</string>
+    <string name="label_send">ENVIAR</string>
+    <string name="toolbar_title">Qual é o número?</string>
 </resources>
