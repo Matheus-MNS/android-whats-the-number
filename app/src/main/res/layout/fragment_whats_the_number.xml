@@ -28,8 +28,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/numberRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="90sp"
@@ -46,6 +46,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginBottom="20dp"
         android:hint="@string/label_guess"
+        android:inputType="number"
+        android:maxLength="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/send"
         app:layout_constraintStart_toStartOf="parent" />
