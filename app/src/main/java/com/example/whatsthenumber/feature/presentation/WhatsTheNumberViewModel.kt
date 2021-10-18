@@ -1,5 +1,6 @@
 package com.example.whatsthenumber.feature.presentation
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,12 +12,16 @@ import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 
 class WhatsTheNumberViewModel(
-    private val getNumberUseCase: GetNumberUseCase
-) : ViewModel() {
+    private val getNumberUseCase: GetNumberUseCase) : ViewModel() {
 
-    val numberLiveData: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>()
+  private val _numberLiveData: MutableLiveData<Int> by lazy {
+      MutableLiveData<Int>()
     }
+
+    val numberLiveData: LiveData<Int>
+    get() = _numberLiveData
+
+
 
     val errorLiveData: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
@@ -26,7 +31,7 @@ class WhatsTheNumberViewModel(
         getNumber()
     }
 
-    private fun getNumber() {
+    fun getNumber() {
         viewModelScope.launch {
             getNumberUseCase()
                 .flowOn(Dispatchers.IO)
@@ -34,10 +39,10 @@ class WhatsTheNumberViewModel(
                     handleError(it)
                 }
                 .collect {
-                    numberLiveData.value = it
+                    _numberLiveData.value = it
+
                 }
         }
-
     }
 
     private fun handleError(throwable: Throwable) {
