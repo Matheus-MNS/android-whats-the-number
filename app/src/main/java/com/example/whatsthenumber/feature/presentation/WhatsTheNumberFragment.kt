@@ -17,7 +17,6 @@ class WhatsTheNumberFragment : Fragment() {
 
     private val binding by lazy { FragmentWhatsTheNumberBinding.inflate(layoutInflater) }
     private val viewModel: WhatsTheNumberViewModel by viewModel()
-    private var numberRequest: Int? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,14 +35,14 @@ class WhatsTheNumberFragment : Fragment() {
         binding.send.setOnClickListener {
             binding.guessDisplay.text = binding.guess.text
             val numberGuess = binding.guess.text.toString().toInt()
-            compareNumbers(numberRequest, numberGuess)
+            viewModel.compareNumbers(numberGuess)
         }
     }
 
     private fun handleObserver() {
-        viewModel.numberLiveData.observe(
+        viewModel.guessStateLiveData.observe(
             viewLifecycleOwner, Observer(
-                ::handleNumber
+                ::compareNumbers
             )
         )
         viewModel.errorLiveData.observe(
@@ -53,9 +52,6 @@ class WhatsTheNumberFragment : Fragment() {
         )
     }
 
-    private fun handleNumber(number: Int) {
-        numberRequest = number
-    }
 
     private fun handlerError(errorCode: String) {
         with(binding) {
@@ -67,20 +63,18 @@ class WhatsTheNumberFragment : Fragment() {
         }
     }
 
-    private fun compareNumbers(numberRequest: Int?, numberGuess: Int) {
-        if (numberRequest != null) {
-            with(binding) {
-                when {
-                    numberGuess > numberRequest ->
-                        guessResult.text = getString(R.string.is_smaller)
-                    numberGuess == numberRequest -> {
-                        guessResult.text = getString(R.string.right)
-                        newGame.isGone = false
-                        send.isEnabled = false
-                    }
-                    else ->
-                        guessResult.text = getString(R.string.is_bigger)
+    private fun compareNumbers(state: GuessNumberStateEnum) {
+        with(binding) {
+            when (state) {
+                GuessNumberStateEnum.IS_SMALLER ->
+                    guessResult.text = getString(R.string.is_smaller)
+                GuessNumberStateEnum.IS_EQUAL -> {
+                    guessResult.text = getString(R.string.right)
+                    newGame.isGone = false
+                    send.isEnabled = false
                 }
+                GuessNumberStateEnum.IS_BIGGER ->
+                    guessResult.text = getString(R.string.is_bigger)
             }
         }
     }
@@ -92,8 +86,8 @@ class WhatsTheNumberFragment : Fragment() {
                 newGame.isGone = true
                 send.isEnabled = true
                 guess.isEnabled = true
-                guessDisplay.text = "0"
-                guessResult.text = ""
+                guessDisplay.text = getString(R.string.label_zero)
+                guessResult.text = getString(R.string.label_zero)
                 guess.text?.clear()
                 hideKeyboard()
             }

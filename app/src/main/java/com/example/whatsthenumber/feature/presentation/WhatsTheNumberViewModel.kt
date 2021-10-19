@@ -12,20 +12,25 @@ import kotlinx.coroutines.flow.flowOn
 import retrofit2.HttpException
 
 class WhatsTheNumberViewModel(
-    private val getNumberUseCase: GetNumberUseCase) : ViewModel() {
+    private val getNumberUseCase: GetNumberUseCase
+) : ViewModel() {
 
-  private val _numberLiveData: MutableLiveData<Int> by lazy {
-      MutableLiveData<Int>()
+    private var randomNumber = 0
+
+    private val guessState: MutableLiveData<GuessNumberStateEnum> by lazy {
+        MutableLiveData<GuessNumberStateEnum>()
     }
 
-    val numberLiveData: LiveData<Int>
-    get() = _numberLiveData
+    val guessStateLiveData: LiveData<GuessNumberStateEnum>
+        get() = guessState
 
 
-
-    val errorLiveData: MutableLiveData<String> by lazy {
+    private val error: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
+
+    val errorLiveData: LiveData<String>
+        get() = error
 
     init {
         getNumber()
@@ -39,7 +44,7 @@ class WhatsTheNumberViewModel(
                     handleError(it)
                 }
                 .collect {
-                    _numberLiveData.value = it
+                    handleSuccess(it)
 
                 }
         }
@@ -50,6 +55,21 @@ class WhatsTheNumberViewModel(
         if (throwable is HttpException) {
             errorCode = throwable.code().toString()
         }
-        errorLiveData.value = errorCode
+        error.value = errorCode
+    }
+
+    private fun handleSuccess(random: Int) {
+        randomNumber = random
+    }
+
+    fun compareNumbers(inputNumber: Int) {
+        when {
+            inputNumber > randomNumber ->
+                guessState.value = GuessNumberStateEnum.IS_BIGGER
+            inputNumber == randomNumber ->
+                guessState.value = GuessNumberStateEnum.IS_EQUAL
+            else ->
+                guessState.value = GuessNumberStateEnum.IS_SMALLER
+        }
     }
 }

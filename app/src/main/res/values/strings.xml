@@ -10,4 +10,6 @@
     <string name="label_new_game">nova partida</string>
     <string name="label_input_counter">%1$s/3</string>
     <string name="label_input_start_counter">0/3</string>
+    <string name="label_zero">0</string>
+    <string name="empty" />
 </resources>
