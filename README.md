@@ -18,12 +18,3 @@
 <p>domain: No domain temos a interface do repositório que serve como assinatura da implementação do repositório e se encontra na camada de dados. O use case é responsável pela comunicação entre camada de domain e presentation; </p> 
 <p>presentantion: Na camada de presentation a view model recebe o use case como parâmetro e através dessa instancia é utilizado o coroutines que decodifica a resposta da api entre sucesso e erro. De acordo com a resposta a informação é feita a comparação entre os números e é devolvido para a fragment o estado da comparação ou erro. A fragment observa os valores da view model e faz as alterações necessárias para exibição das informações;</p>
 <p>di: No di temos os módulos de injeção de dependência por camada. </p>
-
-
-
-<img src="images/Screenshot_isBigger.jpg" width="300" > 
-
-<img src="images/Screenshot_isSmaller.jpg" width="300" >
-<img src="images/Screenshot_isEqual.jpg" width="300" >
-
- <img src="images/Screenshot_Erro.jpg" width="300" >
